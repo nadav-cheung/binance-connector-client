@@ -85,6 +85,14 @@
             <scope>test</scope>
         </dependency>
 
+
+        <!-- binance spot-->
+        <dependency>
+            <groupId>io.github.binance</groupId>
+            <artifactId>binance-spot</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
@@ -93,6 +101,13 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.github.binance</groupId>
+                <artifactId>binance-connector-java-clients</artifactId>
+                <version>1.0.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
