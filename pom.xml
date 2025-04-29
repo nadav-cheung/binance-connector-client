@@ -15,23 +15,16 @@
     <name>binance-connector-client</name>
     <description>binance-connector-client</description>
 
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
 
     <properties>
         <java.version>11</java.version>
         <spring-cloud.version>2021.0.9</spring-cloud.version>
+
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
     </properties>
 
     <dependencies>
@@ -93,6 +86,13 @@
             <version>1.0.0</version>
         </dependency>
 
+
+        <!-- 框架 -->
+        <dependency>
+            <groupId>cn.com.nadav</groupId>
+            <artifactId>nadav-framework-web</artifactId>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
@@ -111,6 +111,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <dependency>
+                <groupId>cn.com.nadav</groupId>
+                <artifactId>nadav-framework-web</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
