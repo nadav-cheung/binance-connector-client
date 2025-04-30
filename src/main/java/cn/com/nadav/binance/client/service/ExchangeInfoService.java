@@ -3,6 +3,7 @@ package cn.com.nadav.binance.client.service;
 import cn.com.nadav.binance.client.controller.account.request.GetPriceRequest;
 import com.binance.connector.client.common.ApiResponse;
 import com.binance.connector.client.spot.rest.api.SpotRestApi;
+import com.binance.connector.client.spot.rest.model.ExchangeInfoResponse;
 import com.binance.connector.client.spot.rest.model.Symbols;
 import com.binance.connector.client.spot.rest.model.TickerPriceResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,12 @@ public class ExchangeInfoService {
         }
         ApiResponse<TickerPriceResponse> tickerPriceResponse = spotRestApi.tickerPrice(null, symbols);
         return tickerPriceResponse.getData();
+    }
+
+    public ExchangeInfoResponse queryExchangeInfo(GetPriceRequest getPriceRequest) {
+        SpotRestApi spotRestApi = spotRestApiCacheService.quireSpotRestApi(getPriceRequest.getApiKey(), getPriceRequest.getSecretKey(), getPriceRequest.getUrl());
+        ApiResponse<ExchangeInfoResponse> exchangeInfoResponseApiResponse = spotRestApi.exchangeInfo(null, null, null, null, null);
+        return exchangeInfoResponseApiResponse.getData();
     }
 
 }
