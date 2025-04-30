@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: binance-connector-client
+
+spot:
+  rest:
+    api:
+      cache:
+        expireAfterWriteSecond: 30
+        initialCapacity: 32
+        maximumSize: 256
+        expireAfterAccessSecond: 15

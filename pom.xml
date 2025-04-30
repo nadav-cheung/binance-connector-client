@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.18</version>
+        <version>3.4.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -18,12 +18,16 @@
 
     <properties>
         <java.version>11</java.version>
-        <spring-cloud.version>2021.0.9</spring-cloud.version>
+        <spring-cloud.version>2024.0.1</spring-cloud.version>
 
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+
+<!--        <jakarta-annotation-version>3.0.0</jakarta-annotation-version>-->
+<!--        <beanvalidation-version>3.1.1</beanvalidation-version>-->
 
     </properties>
 
@@ -86,11 +90,10 @@
             <version>1.0.0</version>
         </dependency>
 
-
         <!-- 框架 -->
         <dependency>
             <groupId>cn.com.nadav</groupId>
-            <artifactId>nadav-framework-web</artifactId>
+            <artifactId>nadav-starter-web</artifactId>
         </dependency>
 
 
@@ -122,10 +125,9 @@
 
             <dependency>
                 <groupId>cn.com.nadav</groupId>
-                <artifactId>nadav-framework-web</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
+                <artifactId>nadav-starter-web</artifactId>
+                <version>1.0.0-alpha1-SNAPSHOT</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
@@ -147,6 +149,27 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- 和 maven package 阶段绑定 -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+
+                        <configuration>
+                            <!-- 按需自定义配置 -->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
         </plugins>
     </build>
 
