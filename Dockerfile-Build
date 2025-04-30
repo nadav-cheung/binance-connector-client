@@ -1,0 +1,40 @@
+# === 构建阶段（使用 JDK 17 的 Maven 官方镜像）===
+FROM maven:3.9-eclipse-temurin-17 AS build
+
+WORKDIR /app
+
+# 提前缓存依赖（加快后续构建）
+COPY pom.xml .
+COPY .mvn/ .mvn
+RUN mvn dependency:go-offline -B
+
+# 拷贝源码并编译打包（跳过测试）
+COPY src ./src
+RUN mvn clean package -DskipTests -B
+
+
+# === 运行阶段（使用精简、安全的 JDK 17 镜像）===
+FROM eclipse-temurin:17-jdk
+
+# 创建非 root 用户用于运行
+RUN addgroup --system spring && adduser --system --ingroup spring spring
+
+WORKDIR /app
+
+# 拷贝构建产物
+COPY --from=build /app/target/*.jar app.jar
+
+# 修改权限为非 root 用户
+RUN chown -R spring:spring /app
+
+# 切换为非 root 用户
+USER spring
+
+# 环境变量：JVM 内存适配容器资源
+ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+
+# 暴露端口（可选）
+EXPOSE 8080
+
+# 启动命令
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
