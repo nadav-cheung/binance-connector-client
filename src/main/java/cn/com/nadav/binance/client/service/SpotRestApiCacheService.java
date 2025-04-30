@@ -1,12 +1,15 @@
 package cn.com.nadav.binance.client.service;
 
 import cn.com.nadav.binance.client.controller.account.request.GetAccountRequest;
+import cn.com.nadav.binance.client.controller.account.request.GetPriceRequest;
 import com.binance.connector.client.common.ApiResponse;
 import com.binance.connector.client.common.configuration.ClientConfiguration;
 import com.binance.connector.client.common.configuration.SignatureConfiguration;
 import com.binance.connector.client.spot.rest.SpotRestApiUtil;
 import com.binance.connector.client.spot.rest.api.SpotRestApi;
 import com.binance.connector.client.spot.rest.model.GetAccountResponse;
+import com.binance.connector.client.spot.rest.model.Symbols;
+import com.binance.connector.client.spot.rest.model.TickerPriceResponse;
 import com.github.benmanes.caffeine.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -59,5 +62,18 @@ public class SpotRestApiCacheService {
         ApiResponse<GetAccountResponse> accountDetailsResponse = spotRestApi.getAccount(getAccountRequest.getOmitZeroBalances(), getAccountRequest.getReceiveWindow());
         return accountDetailsResponse.getData();
     }
+
+
+    public TickerPriceResponse queryCurrentPrice(GetPriceRequest getPriceRequest) {
+        SpotRestApi spotRestApi = quireSpotRestApi(getPriceRequest.getApiKey(), getPriceRequest.getSecretKey(), getPriceRequest.getUrl());
+        Symbols symbols = new Symbols();
+        symbols.addAll(getPriceRequest.getSymbols());
+        if (StringUtils.isNotEmpty(getPriceRequest.getSymbol())) {
+            symbols.add(getPriceRequest.getSymbol());
+        }
+        ApiResponse<TickerPriceResponse> tickerPriceResponse = spotRestApi.tickerPrice(null, symbols);
+        return tickerPriceResponse.getData();
+    }
+
 
 }
