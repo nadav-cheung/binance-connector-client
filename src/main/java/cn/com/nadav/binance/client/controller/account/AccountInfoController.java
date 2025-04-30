@@ -1,6 +1,5 @@
 package cn.com.nadav.binance.client.controller.account;
 
-import cn.com.nadav.binance.client.controller.account.request.AccountInfoRequest;
 import cn.com.nadav.binance.client.controller.account.request.GetAccountRequest;
 import cn.com.nadav.binance.client.service.SpotRestApiCacheService;
 import cn.com.nadavframework.web.rest.ApiResponse;

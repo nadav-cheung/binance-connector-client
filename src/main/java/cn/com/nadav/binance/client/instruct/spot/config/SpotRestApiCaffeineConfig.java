@@ -20,7 +20,7 @@ public class SpotRestApiCaffeineConfig {
     }
 
     @Bean
-    public Cache<String, SpotRestApi> SpotRestApiCache(){
+    public Cache<String, SpotRestApi> SpotRestApiCache() {
         return Caffeine.newBuilder()
                 .expireAfterAccess(spotRestApiCaffeineCacheConfig.getCache().getExpireAfterAccessSecond(), TimeUnit.SECONDS)
                 .maximumSize(spotRestApiCaffeineCacheConfig.getCache().getMaximumSize())

@@ -23,6 +23,15 @@ public class SpotRestApiCacheService {
         this.SpotRestApiCache = SpotRestApiCache;
     }
 
+    // 复合 key（例如 apiKey + secretKey）
+    private static String buildKey(String apiKey, String secretKey, String url) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(apiKey).append("|").append(secretKey);
+        if (StringUtils.isNotEmpty(url)) {
+            sb.append("|").append(url);
+        }
+        return sb.toString();
+    }
 
     public SpotRestApi quireSpotRestApi(String apiKey, String secretKey, String url) {
         String key = buildKey(apiKey, secretKey, url);
@@ -45,22 +54,10 @@ public class SpotRestApiCacheService {
 
     }
 
-
     public GetAccountResponse queryAccountDetailsInfo(GetAccountRequest getAccountRequest) {
         SpotRestApi spotRestApi = quireSpotRestApi(getAccountRequest.getApiKey(), getAccountRequest.getSecretKey(), getAccountRequest.getUrl());
         ApiResponse<GetAccountResponse> accountDetailsResponse = spotRestApi.getAccount(getAccountRequest.getOmitZeroBalances(), getAccountRequest.getReceiveWindow());
         return accountDetailsResponse.getData();
-    }
-
-
-    // 复合 key（例如 apiKey + secretKey）
-    private static String buildKey(String apiKey, String secretKey, String url) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(apiKey).append("|").append(secretKey);
-        if (StringUtils.isNotEmpty(url)) {
-            sb.append("|").append(url);
-        }
-        return sb.toString();
     }
 
 }
