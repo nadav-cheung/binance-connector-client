@@ -57,23 +57,7 @@ public class SpotRestApiCacheService {
 
     }
 
-    public GetAccountResponse queryAccountDetailsInfo(GetAccountRequest getAccountRequest) {
-        SpotRestApi spotRestApi = quireSpotRestApi(getAccountRequest.getApiKey(), getAccountRequest.getSecretKey(), getAccountRequest.getUrl());
-        ApiResponse<GetAccountResponse> accountDetailsResponse = spotRestApi.getAccount(getAccountRequest.getOmitZeroBalances(), getAccountRequest.getReceiveWindow());
-        return accountDetailsResponse.getData();
-    }
 
-
-    public TickerPriceResponse queryCurrentPrice(GetPriceRequest getPriceRequest) {
-        SpotRestApi spotRestApi = quireSpotRestApi(getPriceRequest.getApiKey(), getPriceRequest.getSecretKey(), getPriceRequest.getUrl());
-        Symbols symbols = new Symbols();
-        symbols.addAll(getPriceRequest.getSymbols());
-        if (StringUtils.isNotEmpty(getPriceRequest.getSymbol())) {
-            symbols.add(getPriceRequest.getSymbol());
-        }
-        ApiResponse<TickerPriceResponse> tickerPriceResponse = spotRestApi.tickerPrice(null, symbols);
-        return tickerPriceResponse.getData();
-    }
 
 
 }

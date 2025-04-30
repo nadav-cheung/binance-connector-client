@@ -1,7 +1,8 @@
 package cn.com.nadav.binance.client.controller.account;
 
 import cn.com.nadav.binance.client.controller.account.request.GetAccountRequest;
-import cn.com.nadav.binance.client.service.SpotRestApiCacheService;
+import cn.com.nadav.binance.client.service.AccountInfoService;
+import cn.com.nadav.binance.client.service.ExchangeInfoService;
 import cn.com.nadavframework.web.rest.ApiResponse;
 import com.binance.connector.client.spot.rest.model.GetAccountResponse;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,15 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountInfoController {
 
 
-    private SpotRestApiCacheService spotRestApiCacheService;
+    private AccountInfoService accountInfoService;
+    private ExchangeInfoService exchangeInfoService;
 
-    public AccountInfoController(SpotRestApiCacheService spotRestApiCacheService) {
-        this.spotRestApiCacheService = spotRestApiCacheService;
+    public AccountInfoController(AccountInfoService accountInfoService, ExchangeInfoService exchangeInfoService) {
+        this.accountInfoService = accountInfoService;
+        this.exchangeInfoService = exchangeInfoService;
     }
 
     @PostMapping("/info")
     public ApiResponse<GetAccountResponse> queryAccountInfo(@RequestBody GetAccountRequest getAccountRequest) {
-        GetAccountResponse getAccountResponse = spotRestApiCacheService.queryAccountDetailsInfo(getAccountRequest);
+        GetAccountResponse getAccountResponse = accountInfoService.queryAccountDetailsInfo(getAccountRequest);
         return ApiResponse.success(getAccountResponse);
     }
 

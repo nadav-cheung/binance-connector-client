@@ -1,4 +1,4 @@
-package cn.com.nadav.binance.client.controller.excel;
+package cn.com.nadav.binance.client.controller.excel.dto;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;

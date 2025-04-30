@@ -2,7 +2,9 @@ package cn.com.nadav.binance.client.controller.excel;
 
 import cn.com.nadav.binance.client.controller.account.request.GetAccountRequest;
 import cn.com.nadav.binance.client.controller.account.request.GetPriceRequest;
-import cn.com.nadav.binance.client.service.SpotRestApiCacheService;
+import cn.com.nadav.binance.client.controller.excel.dto.UserBalanceExcelDTO;
+import cn.com.nadav.binance.client.service.AccountInfoService;
+import cn.com.nadav.binance.client.service.ExchangeInfoService;
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.excel.EasyExcel;
 import com.binance.connector.client.spot.rest.model.GetAccountResponse;
@@ -30,17 +32,19 @@ import java.util.Set;
 public class ExcelExportController {
 
 
-    private SpotRestApiCacheService spotRestApiCacheService;
+    private AccountInfoService accountInfoService;
+    private ExchangeInfoService exchangeInfoService;
 
-    public ExcelExportController(SpotRestApiCacheService spotRestApiCacheService) {
-        this.spotRestApiCacheService = spotRestApiCacheService;
+    public ExcelExportController(AccountInfoService accountInfoService, ExchangeInfoService exchangeInfoService) {
+        this.accountInfoService = accountInfoService;
+        this.exchangeInfoService = exchangeInfoService;
     }
 
 
     @GetMapping("/user/balance")
     public void exportExcel(GetAccountRequest getAccountRequest, HttpServletResponse response) throws Exception {
         // 构造导出数据
-        GetAccountResponse getAccountResponse = spotRestApiCacheService.queryAccountDetailsInfo(getAccountRequest);
+        GetAccountResponse getAccountResponse = accountInfoService.queryAccountDetailsInfo(getAccountRequest);
 
 
         List<@Valid GetAccountResponseBalancesInner> balances = getAccountResponse.getBalances();
@@ -59,7 +63,7 @@ public class ExcelExportController {
         GetPriceRequest getPriceRequest = new GetPriceRequest();
         BeanUtils.copyProperties(getAccountRequest, getPriceRequest);
         getPriceRequest.setSymbols(new ArrayList<>(assets));
-        TickerPriceResponse currentPriceResponse = spotRestApiCacheService.queryCurrentPrice(getPriceRequest);
+        TickerPriceResponse currentPriceResponse = exchangeInfoService.queryCurrentPrice(getPriceRequest);
 
 
         // 日期字符串
@@ -77,30 +81,27 @@ public class ExcelExportController {
         List<UserBalanceExcelDTO> dataList = Lists.newArrayList();
         balances.forEach(balance ->
 
-                {
-                    UserBalanceExcelDTO userBalanceExcelDTO = new UserBalanceExcelDTO();
-                    userBalanceExcelDTO.setAsset(balance.getAsset());
-                    userBalanceExcelDTO.setFree(balance.getFree());
-                    userBalanceExcelDTO.setLocked(balance.getLocked());
+        {
+            UserBalanceExcelDTO userBalanceExcelDTO = new UserBalanceExcelDTO();
+            userBalanceExcelDTO.setAsset(balance.getAsset());
+            userBalanceExcelDTO.setFree(balance.getFree());
+            userBalanceExcelDTO.setLocked(balance.getLocked());
 
-                    BigDecimal total = BigDecimal.ZERO;
-                    if (StringUtils.isNotEmpty(balance.getFree())) {
-                        total = total.add(new BigDecimal(balance.getFree()));
-                    }
-                    if (StringUtils.isNotEmpty(balance.getLocked())) {
-                        total = total.add(new BigDecimal(balance.getLocked()));
-                    }
+            BigDecimal total = BigDecimal.ZERO;
+            if (StringUtils.isNotEmpty(balance.getFree())) {
+                total = total.add(new BigDecimal(balance.getFree()));
+            }
+            if (StringUtils.isNotEmpty(balance.getLocked())) {
+                total = total.add(new BigDecimal(balance.getLocked()));
+            }
 
-                    userBalanceExcelDTO.setTotal(total.toPlainString());
+            userBalanceExcelDTO.setTotal(total.toPlainString());
 
-                    dataList.add(userBalanceExcelDTO);
-                }
-        );
+            dataList.add(userBalanceExcelDTO);
+        });
 
         // 写入 Excel 到 response 输出流
-        EasyExcel.write(response.getOutputStream(), UserBalanceExcelDTO.class)
-                .sheet("用户资金信息")
-                .doWrite(dataList);
+        EasyExcel.write(response.getOutputStream(), UserBalanceExcelDTO.class).sheet("用户资金信息").doWrite(dataList);
     }
 }
 
