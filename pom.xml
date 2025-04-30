@@ -11,7 +11,7 @@
 
     <groupId>cn.com.nadav</groupId>
     <artifactId>binance-connector-client</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>binance-connector-client</name>
     <description>binance-connector-client</description>
 

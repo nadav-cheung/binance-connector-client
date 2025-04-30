@@ -52,17 +52,19 @@ public class ExcelExportController {
             return;
         }
 
-        Set<String> assets = Sets.newHashSet();
-//        balances.forEach(balance -> {
-//            String asset = balance.getAsset();
-//            assets.add(asset);
-//        });
+        Set<String> symbolList = Sets.newHashSet();
+        balances.forEach(balance -> {
+            String asset = balance.getAsset();
+            String usdSymbol = exchangeInfoService.queryUSDTSymbols(asset);
+            if (StringUtils.isNotEmpty(usdSymbol)) {
+                symbolList.add(usdSymbol);
+            }
+        });
 
-        assets.add(balances.get(0).getAsset());
 
         GetPriceRequest getPriceRequest = new GetPriceRequest();
         BeanUtils.copyProperties(getAccountRequest, getPriceRequest);
-        getPriceRequest.setSymbols(new ArrayList<>(assets));
+        getPriceRequest.setSymbols(new ArrayList<>(symbolList));
         TickerPriceResponse currentPriceResponse = exchangeInfoService.queryCurrentPrice(getPriceRequest);
 
 
