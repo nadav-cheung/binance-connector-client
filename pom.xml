@@ -25,10 +25,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-
-<!--        <jakarta-annotation-version>3.0.0</jakarta-annotation-version>-->
-<!--        <beanvalidation-version>3.1.1</beanvalidation-version>-->
-
     </properties>
 
     <dependencies>
@@ -39,18 +35,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web-services</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
         <dependency>
@@ -125,8 +109,10 @@
 
             <dependency>
                 <groupId>cn.com.nadav</groupId>
-                <artifactId>nadav-starter-web</artifactId>
+                <artifactId>nadav-framework-dependencies</artifactId>
                 <version>1.0.0-alpha1-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
